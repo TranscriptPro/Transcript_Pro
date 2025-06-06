@@ -1,13 +1,49 @@
-# React + Vite
+# My App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto foi criado com o Vite e está configurado para utilizar o Tailwind CSS, seguindo as recomendações da documentação oficial do Vite.
 
-Currently, two official plugins are available:
+## Pré-requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js (versão recomendada: 18 ou superior)
+- npm (geralmente já incluso com o Node.js)
 
-## Expanding the ESLint configuration
+## Instalação
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# Transcript_Pro
+1. Clone o repositório ou baixe os arquivos do projeto.
+2. No terminal, navegue até a pasta do projeto.
+3. Instale as dependências:
+
+   ```sh
+   npm install
+   ```
+
+## Rodando o projeto localmente
+
+Para iniciar o servidor de desenvolvimento local, execute:
+
+```sh
+npm run dev
+```
+
+O Vite irá iniciar o servidor e mostrar a URL local (geralmente http://localhost:5173) onde você pode acessar o projeto no navegador.
+
+## Configuração do Vite com Tailwind
+
+O arquivo `vite.config.js` foi configurado conforme a documentação oficial do Vite para garantir a integração correta com o Tailwind CSS. Caso precise alterar ou revisar a configuração, consulte a [documentação oficial do Vite](https://vitejs.dev/guide/) e do [Tailwind CSS](https://tailwindcss.com/docs/guides/vite).
+
+## Scripts disponíveis
+
+- `npm run dev`: Inicia o servidor de desenvolvimento
+- `npm run build`: Gera a versão de produção do projeto
+- `npm run preview`: Visualiza localmente a build de produção
+
+## Estrutura do projeto
+
+- `src/`: Código-fonte da aplicação
+- `public/`: Arquivos estáticos
+- `vite.config.js`: Configuração do Vite
+- `package.json`: Dependências e scripts
+
+---
+
+Sinta-se à vontade para contribuir ou adaptar este projeto conforme suas necessidades.
