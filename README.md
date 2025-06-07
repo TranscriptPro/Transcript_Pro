@@ -1,49 +1,92 @@
-# My App
+# Audio Transcription App
 
-Este projeto foi criado com o Vite e está configurado para utilizar o Tailwind CSS, seguindo as recomendações da documentação oficial do Vite.
+A full-stack web application for uploading audio files and transcribing them using Google Cloud Speech-to-Text API.
 
-## Pré-requisitos
+## Features
 
-- Node.js (versão recomendada: 18 ou superior)
-- npm (geralmente já incluso com o Node.js)
+- Upload audio files (mp3, wav, flac, m4a) with drag and drop or file picker
+- Manage uploaded files with status tracking
+- Transcribe audio files to text
+- Playback audio files directly in the browser
+- View, copy, and download transcriptions
 
-## Instalação
+## Tech Stack
 
-1. Clone o repositório ou baixe os arquivos do projeto.
-2. No terminal, navegue até a pasta do projeto.
-3. Instale as dependências:
+- **Frontend:** React, TypeScript, Tailwind CSS, React Query
+- **Backend:** Node.js, Express
+- **Audio Processing:** Google Cloud Speech-to-Text API
 
-   ```sh
-   npm install
-   ```
+## Getting Started
 
-## Rodando o projeto localmente
+### Prerequisites
 
-Para iniciar o servidor de desenvolvimento local, execute:
+- Node.js (v14+)
+- npm or yarn
+- Google Cloud account with Speech-to-Text API enabled
 
-```sh
-npm run dev
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/audio-transcription-app.git
+cd audio-transcription-app
 ```
 
-O Vite irá iniciar o servidor e mostrar a URL local (geralmente http://localhost:5173) onde você pode acessar o projeto no navegador.
+2. Install dependencies:
 
-## Configuração do Vite com Tailwind
+```bash
+npm install
+```
 
-O arquivo `vite.config.js` foi configurado conforme a documentação oficial do Vite para garantir a integração correta com o Tailwind CSS. Caso precise alterar ou revisar a configuração, consulte a [documentação oficial do Vite](https://vitejs.dev/guide/) e do [Tailwind CSS](https://tailwindcss.com/docs/guides/vite).
+3. Create a `.env` file from the example:
 
-## Scripts disponíveis
+```bash
+cp .env.example .env
+```
 
-- `npm run dev`: Inicia o servidor de desenvolvimento
-- `npm run build`: Gera a versão de produção do projeto
-- `npm run preview`: Visualiza localmente a build de produção
+4. Configure your Google Cloud credentials:
 
-## Estrutura do projeto
+- Create a service account key in the Google Cloud Console
+- Download the JSON key file
+- Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of your key file
 
-- `src/`: Código-fonte da aplicação
-- `public/`: Arquivos estáticos
-- `vite.config.js`: Configuração do Vite
-- `package.json`: Dependências e scripts
+### Development
 
----
+Start the development server:
 
-Sinta-se à vontade para contribuir ou adaptar este projeto conforme suas necessidades.
+```bash
+npm run dev:all
+```
+
+This will start both the frontend and backend servers.
+
+- Frontend: http://localhost:5173
+- Backend: http://localhost:3001
+
+## Google Cloud Speech-to-Text Configuration
+
+The application is configured to use Google Cloud Speech-to-Text with the following settings:
+
+- Language: Portuguese (Brazil) - `pt-BR`
+- Profanity filter: Enabled
+- Word timestamps: Enabled
+- Max alternatives: 1
+
+## Production Deployment
+
+1. Build the frontend:
+
+```bash
+npm run build
+```
+
+2. Start the production server:
+
+```bash
+npm start
+```
+
+## License
+
+MIT
