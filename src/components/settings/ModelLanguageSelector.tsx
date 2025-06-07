@@ -11,27 +11,27 @@ interface ModelLanguageSelectorProps {
 const WHISPER_MODELS = {
   'tiny': {
     size: '39MB',
-    speed: 'Fastest',
-    accuracy: 'Basic',
-    description: 'Fastest model, good for testing and quick transcriptions'
+    speed: 'Mais rápido',
+    accuracy: 'Básica',
+    description: 'Modelo mais rápido, ideal para testes e transcrições rápidas.'
   },
   'base': {
     size: '74MB',
-    speed: 'Fast',
-    accuracy: 'Good',
-    description: 'Balanced speed and accuracy for most use cases'
+    speed: 'Rápido',
+    accuracy: 'Boa',
+    description: 'Equilíbrio entre velocidade e precisão para a maioria dos casos.'
   },
   'small': {
     size: '244MB',
-    speed: 'Medium',
-    accuracy: 'Better',
-    description: 'Better accuracy, suitable for important transcriptions'
+    speed: 'Média',
+    accuracy: 'Melhor',
+    description: 'Maior precisão, indicado para transcrições importantes.'
   },
   'medium': {
     size: '769MB',
-    speed: 'Slow',
-    accuracy: 'High',
-    description: 'High accuracy, requires more time and memory'
+    speed: 'Lento',
+    accuracy: 'Alta',
+    description: 'Alta precisão, requer mais tempo e memória.'
   }
 };
 
