@@ -1,4 +1,4 @@
-# Audio Transcription App
+# TranscriptPro App
 
 A full-stack web application for uploading audio files and transcribing them using Google Cloud Speech-to-Text API.
 

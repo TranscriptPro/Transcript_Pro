@@ -36,15 +36,15 @@ const TranscriptionApp = () => {
   const TabButton = ({ id, label, icon: Icon, active, onClick, ...rest }: any) => (
     <button
       onClick={() => onClick(id)}
-      className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-        active 
-          ? 'bg-blue-600 text-white shadow-lg' 
-          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-      }`}
+      className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all font-medium
+        ${active
+          ? 'bg-black text-white shadow-lg'
+          : 'bg-black text-gray-500 hover:bg-gray-800 border border-gray-700'}
+      `}
       {...rest}
     >
       <Icon size={18} />
-      <span className="font-medium">{label}</span>
+      <span>{label}</span>
     </button>
   );
 
