@@ -1,3 +1,18 @@
 {
-  "files": []
+  "files": [
+    {
+      "id": "195f6654-10e2-4ae0-ac87-1afcf4b0f502",
+      "name": "GravaÃ§Ã£o (14).m4a",
+      "filename": "195f6654-10e2-4ae0-ac87-1afcf4b0f502.m4a",
+      "size": 699510,
+      "mimetype": "audio/x-m4a",
+      "path": "C:\\Users\\marci\\OneDrive\\Documentos\\MG_Projeto\\my-app\\server\\uploads\\195f6654-10e2-4ae0-ac87-1afcf4b0f502.m4a",
+      "url": "http://localhost:3001/uploads/195f6654-10e2-4ae0-ac87-1afcf4b0f502.m4a",
+      "status": "processing",
+      "createdAt": "2025-06-08T16:27:37.678Z",
+      "cliOutput": "Carregando modelo Whisper BASE...",
+      "selectedModel": "base",
+      "selectedLanguage": "pt-BR"
+    }
+  ]
 }
