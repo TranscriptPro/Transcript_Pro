@@ -8,11 +8,12 @@
       "mimetype": "audio/x-m4a",
       "path": "C:\\Users\\marci\\OneDrive\\Documentos\\MG_Projeto\\my-app\\server\\uploads\\195f6654-10e2-4ae0-ac87-1afcf4b0f502.m4a",
       "url": "http://localhost:3001/uploads/195f6654-10e2-4ae0-ac87-1afcf4b0f502.m4a",
-      "status": "processing",
+      "status": "transcribed",
       "createdAt": "2025-06-08T16:27:37.678Z",
-      "cliOutput": "Carregando modelo Whisper BASE...",
+      "cliOutput": "Transcrição concluída com sucesso usando modelo BASE em pt-BR!",
       "selectedModel": "base",
-      "selectedLanguage": "pt-BR"
+      "selectedLanguage": "pt-BR",
+      "transcription": " Ok, vamos iniciar um teste muito mais completo porque nós agora vamos testar o maior modelo que o modelo medium. Não vamos saber como ele funciona, não vamos saber se quando ele escolhe um idioma só pode utilizar palavras daquele idioma e não ter um inglês como por exemplo, real desco, não sei se esse termo será transcriídos precisamente porque estamos a pegar um termo de um outro idioma que eu inglês."
     }
   ]
 }
