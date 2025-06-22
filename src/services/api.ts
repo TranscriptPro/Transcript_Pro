@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = 'http://localhost:3000/api';
 
 export const uploadFile = async (
   formData: FormData, 
@@ -41,5 +41,16 @@ export const startTranscription = async (fileId: string, model?: string, languag
     model: model || 'base',
     language: language || 'pt-BR'
   });
+  return response.data;
+};
+
+export const sendTranscriptionEmail = async (data: {
+  transcription: string;
+  fileName: string;
+  aiTool: string;
+  auditRules: string;
+  destinationEmail: string;
+}) => {
+  const response = await axios.post(`${API_URL}/send-email`, data);
   return response.data;
 };

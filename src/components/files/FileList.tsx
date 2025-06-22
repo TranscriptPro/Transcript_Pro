@@ -10,6 +10,12 @@ interface FileListProps {
   refreshTrigger: number;
   selectedModel: string;
   selectedLanguage: string;
+  onSendEmail?: (transcription: string, fileName: string) => void;
+  auditSettings?: {
+    aiTool: string;
+    auditRules: string;
+    destinationEmail: string;
+  };
 }
 
 interface AudioFile {
@@ -26,7 +32,13 @@ interface AudioFile {
   selectedLanguage?: string;
 }
 
-const FileList: React.FC<FileListProps> = ({ refreshTrigger, selectedModel, selectedLanguage }) => {
+const FileList: React.FC<FileListProps> = ({ 
+  refreshTrigger, 
+  selectedModel, 
+  selectedLanguage, 
+  onSendEmail,
+  auditSettings 
+}) => {
   const [expandedFile, setExpandedFile] = useState<string | null>(null);
   const [playingFile, setPlayingFile] = useState<string | null>(null);
   const [showCliOutput, setShowCliOutput] = useState<Record<string, boolean>>({});
@@ -305,7 +317,11 @@ const FileList: React.FC<FileListProps> = ({ refreshTrigger, selectedModel, sele
                             )}
                             
                             {file.status === 'transcribed' && file.transcription && (
-                              <TranscriptionResult transcription={file.transcription} fileName={file.name} />
+                              <TranscriptionResult 
+                                transcription={file.transcription} 
+                                fileName={file.name}
+                                onSendEmail={onSendEmail}
+                              />
                             )}
                             
                             {file.status === 'processing' && (

@@ -13,6 +13,7 @@ import { createServer } from 'node:http';
 import uploadRoutes from './routes/upload.js';
 import filesRoutes from './routes/files.js';
 import transcribeRoutes from './routes/transcribe.js';
+import emailRoutes from './routes/email.js';
 
 // WebSocket handlers
 import { setupRealtimeTranscription } from './websocket/realtimeHandler.js';
@@ -35,7 +36,7 @@ if (!fs.existsSync(dbPath)) {
 }
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 // Create HTTP server
 const server = createServer(app);
@@ -90,6 +91,7 @@ app.use('/uploads', (req, res, next) => {
 app.use('/api', uploadRoutes);
 app.use('/api', filesRoutes);
 app.use('/api', transcribeRoutes);
+app.use('/api', emailRoutes);
 
 // Setup WebSocket handlers
 setupRealtimeTranscription(wss);

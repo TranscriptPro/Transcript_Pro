@@ -4,12 +4,16 @@ import {
   FileText, 
   BarChart3,
   Users,
-  Settings
+  Settings,
+  Cog,
+  Mail
 } from 'lucide-react';
 import FileUpload from './upload/FileUpload';
 import FileList from './files/FileList';
 import RealtimeTranscriber from './realtime/RealtimeTranscriber';
 import ModelLanguageSelector from './settings/ModelLanguageSelector';
+import AuditSettings from './settings/AuditSettings';
+import { sendTranscriptionEmail } from '../services/api';
 
 const TranscriptionApp = () => {
   // Main application state
@@ -19,6 +23,7 @@ const TranscriptionApp = () => {
     projects: ['Projeto A', 'Projeto B'] 
   });
   const [activeTab, setActiveTab] = useState('files');
+  const [activeSettingsTab, setActiveSettingsTab] = useState('transcription');
   
   // File management state
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -27,9 +32,61 @@ const TranscriptionApp = () => {
   const [selectedModel, setSelectedModel] = useState('base');
   const [selectedLanguage, setSelectedLanguage] = useState('pt-BR');
   
+  // Audit settings state
+  const [aiTool, setAiTool] = useState('chatgpt');
+  const [auditRules, setAuditRules] = useState('');
+  const [destinationEmail, setDestinationEmail] = useState('');
+  
+  // Email sending state
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [emailMessage, setEmailMessage] = useState('');
+  
   // Handle file upload completion
   const handleFileUploaded = () => {
     setRefreshTrigger(prev => prev + 1);
+  };
+
+  // Handle email sending
+  const handleSendEmail = async (transcription: string, fileName: string) => {
+    if (!destinationEmail) {
+      setEmailStatus('error');
+      setEmailMessage('E-mail de destino não configurado. Configure nas Configurações de Auditoria.');
+      setTimeout(() => {
+        setEmailStatus('idle');
+        setEmailMessage('');
+      }, 5000);
+      return;
+    }
+
+    try {
+      setEmailStatus('sending');
+      setEmailMessage('Enviando e-mail...');
+      
+      await sendTranscriptionEmail({
+        transcription,
+        fileName,
+        aiTool,
+        auditRules,
+        destinationEmail
+      });
+      
+      setEmailStatus('success');
+      setEmailMessage('E-mail enviado com sucesso!');
+      
+      setTimeout(() => {
+        setEmailStatus('idle');
+        setEmailMessage('');
+      }, 5000);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setEmailStatus('error');
+      setEmailMessage('Erro ao enviar e-mail. Tente novamente.');
+      
+      setTimeout(() => {
+        setEmailStatus('idle');
+        setEmailMessage('');
+      }, 5000);
+    }
   };
 
   // Allow TabButton props to be of any type
@@ -44,6 +101,21 @@ const TranscriptionApp = () => {
       {...rest}
     >
       <Icon size={18} />
+      <span>{label}</span>
+    </button>
+  );
+
+  // Settings sub-tab button component
+  const SettingsTabButton = ({ id, label, icon: Icon, active, onClick }: any) => (
+    <button
+      onClick={() => onClick(id)}
+      className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-all text-sm font-medium
+        ${active
+          ? 'bg-blue-100 text-blue-700 border border-blue-200'
+          : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'}
+      `}
+    >
+      <Icon size={16} />
       <span>{label}</span>
     </button>
   );
@@ -138,6 +210,23 @@ const TranscriptionApp = () => {
         </div>
       </nav>
 
+      {/* Email Status Notification */}
+      {emailStatus !== 'idle' && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+          <div className={`p-3 rounded-lg flex items-center space-x-2 ${
+            emailStatus === 'sending' ? 'bg-blue-50 text-blue-700' :
+            emailStatus === 'success' ? 'bg-green-50 text-green-700' :
+            'bg-red-50 text-red-700'
+          }`}>
+            {emailStatus === 'sending' && (
+              <div className="animate-spin h-4 w-4 border-2 border-blue-700 border-t-transparent rounded-full" />
+            )}
+            <Mail className="h-4 w-4" />
+            <span className="text-sm font-medium">{emailMessage}</span>
+          </div>
+        </div>
+      )}
+
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'files' && (
@@ -147,17 +236,58 @@ const TranscriptionApp = () => {
               refreshTrigger={refreshTrigger}
               selectedModel={selectedModel}
               selectedLanguage={selectedLanguage}
+              onSendEmail={handleSendEmail}
+              auditSettings={{
+                aiTool,
+                auditRules,
+                destinationEmail
+              }}
             />
           </div>
         )}
         {activeTab === 'realtime' && <RealtimeTranscriber />}
         {activeTab === 'settings' && (
-          <ModelLanguageSelector
-            selectedModel={selectedModel}
-            selectedLanguage={selectedLanguage}
-            onModelChange={setSelectedModel}
-            onLanguageChange={setSelectedLanguage}
-          />
+          <div className="space-y-6">
+            {/* Settings Sub-Navigation */}
+            <div className="bg-white rounded-lg border border-gray-200 p-4">
+              <div className="flex space-x-2 overflow-x-auto">
+                <SettingsTabButton
+                  id="transcription"
+                  label="Configurações de Transcrição"
+                  icon={Cog}
+                  active={activeSettingsTab === 'transcription'}
+                  onClick={setActiveSettingsTab}
+                />
+                <SettingsTabButton
+                  id="audit"
+                  label="Configurações de Auditoria"
+                  icon={Mail}
+                  active={activeSettingsTab === 'audit'}
+                  onClick={setActiveSettingsTab}
+                />
+              </div>
+            </div>
+
+            {/* Settings Content */}
+            {activeSettingsTab === 'transcription' && (
+              <ModelLanguageSelector
+                selectedModel={selectedModel}
+                selectedLanguage={selectedLanguage}
+                onModelChange={setSelectedModel}
+                onLanguageChange={setSelectedLanguage}
+              />
+            )}
+            {activeSettingsTab === 'audit' && (
+              <AuditSettings
+                aiTool={aiTool}
+                auditRules={auditRules}
+                destinationEmail={destinationEmail}
+                onAiToolChange={setAiTool}
+                onAuditRulesChange={setAuditRules}
+                onDestinationEmailChange={setDestinationEmail}
+              />
+            )}
+          </div>
         )}
         {activeTab === 'reports' && <ReportsTab />}
         {activeTab === 'users' && <UsersTab />}

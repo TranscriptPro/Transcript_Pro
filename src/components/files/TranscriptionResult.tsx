@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { Copy, Check, FileText, Download } from 'lucide-react';
+import { Copy, Check, FileText, Download, Mail } from 'lucide-react';
 
 interface TranscriptionResultProps {
   transcription: string;
   fileName: string;
+  onSendEmail?: (transcription: string, fileName: string) => void;
 }
 
-const TranscriptionResult: React.FC<TranscriptionResultProps> = ({ transcription, fileName }) => {
+const TranscriptionResult: React.FC<TranscriptionResultProps> = ({ 
+  transcription, 
+  fileName, 
+  onSendEmail 
+}) => {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
@@ -28,6 +33,12 @@ const TranscriptionResult: React.FC<TranscriptionResultProps> = ({ transcription
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
+  };
+
+  const handleSendEmail = () => {
+    if (onSendEmail) {
+      onSendEmail(transcription, fileName);
+    }
   };
 
   return (
@@ -52,6 +63,15 @@ const TranscriptionResult: React.FC<TranscriptionResultProps> = ({ transcription
           >
             <Download className="h-4 w-4" />
           </button>
+          {onSendEmail && (
+            <button
+              onClick={handleSendEmail}
+              className="p-1.5 rounded-md bg-blue-100 hover:bg-blue-200 text-blue-700 transition-colors"
+              title="Enviar por e-mail"
+            >
+              <Mail className="h-4 w-4" />
+            </button>
+          )}
         </div>
       </div>
       <div className="bg-gray-50 rounded-md p-3 max-h-60 overflow-y-auto">
