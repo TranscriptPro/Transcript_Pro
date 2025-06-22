@@ -1,4 +1,5 @@
 import express from 'express';
+import nodemailer from 'nodemailer';
 
 const router = express.Router();
 
@@ -48,52 +49,76 @@ Utilize a ferramenta de IA sugerida (${aiToolDisplayName}) para auxiliar na aná
 
 Atenciosamente,
 Sistema TranscriptPro
+mg.transcriptpro@gmail.com
     `.trim();
     
-    // TODO: Integrate with email sending service (Nodemailer, SendGrid, etc.)
-    // For now, we'll simulate email sending and log the email content
+    // Check if email configuration is available
+    const emailConfigured = process.env.EMAIL_USER && process.env.EMAIL_PASS;
     
-    console.log('=== EMAIL SIMULATION ===');
-    console.log('To:', destinationEmail);
-    console.log('Subject:', emailSubject);
-    console.log('Body:', emailBody);
-    console.log('========================');
-    
-    // In a real implementation, you would use an email service like:
-    /*
-    const nodemailer = require('nodemailer');
-    
-    const transporter = nodemailer.createTransporter({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      secure: false,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+    if (emailConfigured) {
+      try {
+        // Create transporter for Gmail
+        const transporter = nodemailer.createTransporter({
+          host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+          port: parseInt(process.env.EMAIL_PORT) || 587,
+          secure: false, // true for 465, false for other ports
+          auth: {
+            user: process.env.EMAIL_USER, // mg.transcriptpro@gmail.com
+            pass: process.env.EMAIL_PASS  // App password from Gmail
+          }
+        });
+        
+        // Send email
+        const info = await transporter.sendMail({
+          from: `"TranscriptPro" <${process.env.EMAIL_FROM || 'mg.transcriptpro@gmail.com'}>`,
+          to: destinationEmail,
+          subject: emailSubject,
+          text: emailBody,
+          html: emailBody.replace(/\n/g, '<br>').replace(/===/g, '<strong>===').replace(/===/g, '===</strong>')
+        });
+        
+        console.log('Email sent successfully:', info.messageId);
+        
+        res.status(200).json({
+          message: 'E-mail de auditoria enviado com sucesso',
+          details: {
+            to: destinationEmail,
+            subject: emailSubject,
+            aiTool: aiToolDisplayName,
+            fileName: fileName,
+            timestamp: new Date().toISOString(),
+            messageId: info.messageId
+          }
+        });
+        
+      } catch (emailError) {
+        console.error('Error sending email:', emailError);
+        throw new Error(`Falha ao enviar e-mail: ${emailError.message}`);
       }
-    });
-    
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@transcriptpro.com',
-      to: destinationEmail,
-      subject: emailSubject,
-      text: emailBody
-    });
-    */
-    
-    // Simulate processing time
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    res.status(200).json({
-      message: 'E-mail de auditoria enviado com sucesso',
-      details: {
-        to: destinationEmail,
-        subject: emailSubject,
-        aiTool: aiToolDisplayName,
-        fileName: fileName,
-        timestamp: new Date().toISOString()
-      }
-    });
+    } else {
+      // Email not configured - simulate sending for development
+      console.log('=== EMAIL SIMULATION (Email not configured) ===');
+      console.log('From: mg.transcriptpro@gmail.com');
+      console.log('To:', destinationEmail);
+      console.log('Subject:', emailSubject);
+      console.log('Body:', emailBody);
+      console.log('===============================================');
+      
+      // Simulate processing time
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      res.status(200).json({
+        message: 'E-mail simulado com sucesso (configuração de e-mail necessária para envio real)',
+        details: {
+          to: destinationEmail,
+          subject: emailSubject,
+          aiTool: aiToolDisplayName,
+          fileName: fileName,
+          timestamp: new Date().toISOString(),
+          note: 'Configure EMAIL_USER e EMAIL_PASS no arquivo .env para envio real'
+        }
+      });
+    }
     
   } catch (error) {
     console.error('Error sending audit email:', error);
